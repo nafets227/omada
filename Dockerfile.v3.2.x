@@ -35,10 +35,13 @@ RUN \
   mkdir /opt/tplink/EAPController/logs /opt/tplink/EAPController/work &&\
   chown -R omada:omada /opt/tplink/EAPController/data /opt/tplink/EAPController/logs /opt/tplink/EAPController/work
 
+RUN sed -i -e 's:8043:443:' -e 's:8088:80:' \
+    /opt/tplink/EAPController/properties/jetty.properties
+
 COPY entrypoint.sh /entrypoint.sh
 
 WORKDIR /opt/tplink/EAPController
-EXPOSE 8088 8043 27001/udp 27002 29810/udp 29811 29812 29813
+EXPOSE 80 443 27001/udp 27002 29810/udp 29811 29812 29813
 HEALTHCHECK --start-period=5m CMD wget --quiet --tries=1 --no-check-certificate -O /dev/null --server-response --timeout=5 https://127.0.0.1:8043/login || exit 1
 VOLUME ["/opt/tplink/EAPController/data","/opt/tplink/EAPController/work","/opt/tplink/EAPController/logs","/cert"]
 ENTRYPOINT ["/entrypoint.sh"]

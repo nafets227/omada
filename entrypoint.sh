@@ -66,5 +66,5 @@ then
     -srcstorepass tplink
 fi
 
-echo "INFO: Starting Omada Controller as user omada"
-exec gosu omada "${@}"
+echo "INFO: Starting Omada Controller"
+exec "${@}"
